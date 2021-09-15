@@ -8,7 +8,32 @@ def respond():
     # Retrieve the video_id from url parameter
     vid_id = request.args.get("video_id", None)
 
-    v_id = vid_id.split("=")[1].split("&")[0]
+    if "youtube.com" in vid_id:
+        
+        try:
+            v_id = vid_id.split("=")[1]
+            
+            try:
+                v_id = v_id.split("&")[0]
+            
+            except:
+                v_id = "False"
+        
+        except:
+            v_id = "False"
+    
+    elif "youtu.be" in vid_id:
+        
+        try:
+            v_id = vid_id.split("/")[3]
+        
+        except:
+            
+            v_id = "False"
+    
+    else:
+        v_id = "False"
+
 
     # For debugging
     # print(f"got name {v_id}")
@@ -20,10 +45,10 @@ def respond():
         response["response"] = 200
         response["error"] = "no video id found, please provide valid video id."
     
-    # # Check if the user entered a invalid instead video_id
-    # elif str(v_id).isdigit():
-    #     response["response"] = 200
-    #     response["error"] = "video id invalid, please provide valid video id."
+    # Check if the user entered a invalid instead video_id
+    elif str(v_id) == "False":
+        response["response"] = 200
+        response["error"] = "video id invalid, please provide valid video id."
     
     # Now the user has given a valid video id
     else:
