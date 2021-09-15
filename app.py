@@ -6,7 +6,9 @@ app = Flask(__name__)
 def respond():
 
     # Retrieve the video_id from url parameter
-    v_id = request.args.get("video_id", None)
+    vid_id = request.args.get("video_id", None)
+
+    v_id = vid_id.split("=")[1].split("&")[0]
 
     # For debugging
     # print(f"got name {v_id}")
