@@ -5,6 +5,8 @@ YouTube Transcript Summarizer API
 
 from flask import Flask, request, jsonify
 
+from model import summarizer_model
+
 app = Flask(__name__)
 
 
@@ -61,7 +63,8 @@ def respond():
     else:
         data['message'] = "Success"
         data['id'] = v_id
-        data['count'] = 0
+        data['count'] = 1
+        data['summarized'] = summarizer_model(v_id)
     
     body["data"] = data
 
