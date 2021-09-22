@@ -29,7 +29,12 @@ def summarizer_model(video_id):
     out = out['summary_text']
     summarized_text.append(out)
     total_len += len(out)
-  return summarized_text
+
+    script = ""
+    for i in summarized_text:
+      script += i.strip()
+
+  return script
   # print(summarized_text)
   # print(total_len)
 
