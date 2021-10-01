@@ -3,9 +3,10 @@ Project Name: YouTube Transcript Summarizer
 YouTube Transcript Summarizer API
 """
 
+
 from flask import Flask, request, jsonify
 
-from model import summarizer_model
+from model import nlp_model
 
 app = Flask(__name__)
 
@@ -14,62 +15,61 @@ app = Flask(__name__)
 def respond():
 
     # Retrieve the video_id from url parameter
-    vid_id = request.args.get("video_id", None)
+    vid_url = request.args.get("video_url", None)
 
-    if "youtube.com" in vid_id:
-        
+    if "youtube.com" in vid_url:
+
         try:
-            v_id = vid_id.split("=")[1]
-            
+            video_id = vid_url.split("=")[1]
+
             try:
-                v_id = v_id.split("&")[0]
-            
-            except:
-                v_id = "False"
-        
-        except:
-            v_id = "False"
-    
-    elif "youtu.be" in vid_id:
-        
-        try:
-            v_id = vid_id.split("/")[3]
-        
-        except:
-            
-            v_id = "False"
-    
-    else:
-        v_id = "False"
+                video_id = video_id.split("&")[0]
 
+            except:
+                video_id = "False"
+
+        except:
+            video_id = "False"
+
+    elif "youtu.be" in vid_url:
+
+        try:
+            video_id = vid_url.split("/")[3]
+
+        except:
+
+            video_id = "False"
+
+    else:
+        video_id = "False"
 
     # For debugging
-    # print(f"got name {v_id}")
+    # print(f"got name {video_id}")
 
     body = {}
     data = {}
 
     # Check if user doesn't provided  at all
-    if not v_id:
+    if not video_id:
         data['message'] = "Failed"
         data["error"] = "no video id found, please provide valid video id."
-    
+
     # Check if the user entered a invalid instead video_id
-    elif str(v_id) == "False":
+    elif str(video_id) == "False":
         data['message'] = "Failed"
         data["error"] = "video id invalid, please provide valid video id."
-    
+
     # Now the user has given a valid video id
     else:
         data['message'] = "Success"
-        data['id'] = v_id
-        data['count'] = 1
-        data['summarized'] = summarizer_model(v_id)
-    
+        data['id'] = video_id
+        data['original_txt_len'], data['final_sum_len'], data['summary'] = nlp_model(
+            video_id)
+
     body["data"] = data
 
     # Return the response in json format
-    return buildResponse(200, body)
+    return buildResponse(body)
 
 
 # Welcome message to our server
@@ -80,19 +80,17 @@ def index():
     body['message'] = "Success"
     body['data'] = "Welcome to YTS API."
 
-    return buildResponse(200, body)
+    return buildResponse(body)
 
 
-def buildResponse(statusCode, body):
+def buildResponse(body):
 
-    res = {
-            "statusCode": statusCode,
-		    "headers": {
-			"Content-Type": "application/json",
-		    },
-		    "body": body,
-        }
-    return jsonify(res)
+    # from flask import json, Response
+    # res = Response(response=json.dumps(body), status=statusCode, mimetype="application/json")
+    # res.headers["Content-Type"] = "application/json; charset=utf-8"
+    # return res
+
+    return jsonify(body)
 
 
 if __name__ == '__main__':
