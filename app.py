@@ -63,7 +63,7 @@ def respond():
     else:
         data['message'] = "Success"
         data['id'] = video_id
-        data['original_txt_len'], data['final_sum_len'], data['summary'] = nlp_model(
+        data['original_txt_length'], data['final_summ_length'], data['summary'] = nlp_model(
             video_id)
 
     body["data"] = data
