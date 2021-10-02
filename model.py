@@ -45,8 +45,8 @@ def text_summarizer(text):
     select_length = int(len(sentence_tokens)*0.3)
     summary = nlargest(select_length, sentence_scores, key=sentence_scores.get)
 
-    summary = [re.sub('[.]', '', (word.text).capitalize().replace(
-        "\n", ",").strip()) for word in summary]
+    summary = [re.sub('[.]', '', (word.text).replace(
+        "\n", ",").strip()).capitalize() for word in summary]
     final_text = '. '.join(summary)
 
     final_summary = re.sub(',,|,\.|,\-|[\"]', '', final_text)
@@ -58,12 +58,10 @@ def nlp_model(v_id):
 
     transcript = YouTubeTranscriptApi.get_transcript(v_id)
 
-
     transcript_size = len(transcript)
 
     original_text = ' '.join([t['text'] for t in transcript])
     original_text_length = len(original_text)
-
 
     s_t = []
 
