@@ -2,7 +2,7 @@ import re
 import nltk
 import spacy
 from string import punctuation
-from youtube_transcript_api import YouTubeTranscriptApi
+from transcript import get_transcript_of_yt_video
 
 nltk.download('stopwords')
 
@@ -56,33 +56,37 @@ def text_summarizer(text):
 
 def nlp_model(v_id):
 
-    transcript = YouTubeTranscriptApi.get_transcript(v_id)
+    transcript = get_transcript_of_yt_video(v_id)
 
-    transcript_size = len(transcript)
+    if (transcript == '0'):
+        return '0'
 
-    original_text = ' '.join([t['text'] for t in transcript])
-    original_text_length = len(original_text)
+    else:
+        transcript_size = len(transcript)
 
-    s_t = []
+        original_text = ' '.join([t['text'] for t in transcript])
+        original_text_length = len(original_text)
 
-    result = ""
+        s_t = []
 
-    for txt in range(0, transcript_size):
-        if (txt != 0 and txt % 100 == 0):
-            result += ' ' + transcript[txt]['text']
-            s_t.append(text_summarizer(result))
-            result = ""
-        else:
-            result += ' ' + transcript[txt]['text']
+        result = ""
 
-        if (txt == transcript_size - 1):
-            result += ' ' + transcript[txt]['text']
-            s_t.append(text_summarizer(result))
+        for txt in range(0, transcript_size):
+            if (txt != 0 and txt % 100 == 0):
+                result += ' ' + transcript[txt]['text']
+                s_t.append(text_summarizer(result))
+                result = ""
+            else:
+                result += ' ' + transcript[txt]['text']
 
-    final_smy = ' '.join(s_t) + '.'
-    final_summary_length = len(final_smy)
+            if (txt == transcript_size - 1):
+                result += ' ' + transcript[txt]['text']
+                s_t.append(text_summarizer(result))
 
-    # print(original_text_length, '-->', final_summary_length)
-    # print(final_smy)
+        final_smy = ' '.join(s_t) + '.'
+        final_summary_length = len(final_smy)
 
-    return original_text_length, final_summary_length, final_smy
+        # print(original_text_length, '-->', final_summary_length)
+        # print(final_smy)
+
+        return original_text_length, final_summary_length, final_smy

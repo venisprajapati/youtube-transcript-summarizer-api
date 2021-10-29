@@ -52,19 +52,25 @@ def respond():
     # Check if user doesn't provided  at all
     if not video_id:
         data['message'] = "Failed"
-        data["error"] = "no video id found, please provide valid video id."
+        data['error'] = "no video id found, please provide valid video id."
 
     # Check if the user entered a invalid instead video_id
     elif str(video_id) == "False":
         data['message'] = "Failed"
-        data["error"] = "video id invalid, please provide valid video id."
+        data['error'] = "video id invalid, please provide valid video id."
 
     # Now the user has given a valid video id
     else:
-        data['message'] = "Success"
-        data['id'] = video_id
-        data['original_txt_length'], data['final_summ_length'], data['summary'] = nlp_model(
-            video_id)
+
+        if nlp_model(video_id) == "0":
+            data['message'] = "Failed"
+            data['error'] = "API's not able to retrive Video Transcript."
+
+        else:
+            data['message'] = "Success"
+            data['id'] = video_id
+            data['original_txt_length'], data['final_summ_length'], data['summary'] = nlp_model(
+                video_id)
 
     body["data"] = data
 
