@@ -3,6 +3,7 @@ import nltk
 import spacy
 from string import punctuation
 from youtube_transcript_api import YouTubeTranscriptApi
+# from pybraille import convertText
 
 nltk.download('stopwords')
 
@@ -85,4 +86,6 @@ def nlp_model(v_id):
     # print(original_text_length, '-->', final_summary_length)
     # print(final_smy)
 
+
+    # braille_summary = convertText(final_smy)
     return original_text_length, final_summary_length, final_smy
