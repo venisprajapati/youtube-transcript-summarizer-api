@@ -5,10 +5,12 @@ YouTube Transcript Summarizer API
 
 
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 from model import nlp_model
 
 app = Flask(__name__)
+CORS(app)
 
 
 @app.route('/api/', methods=['GET'])
@@ -95,8 +97,11 @@ def buildResponse(body):
     # res = Response(response=json.dumps(body), status=statusCode, mimetype="application/json")
     # res.headers["Content-Type"] = "application/json; charset=utf-8"
     # return res
+    
+    response = jsonify(body)
+    # response.headers.add('Access-Control-Allow-Origin', '*')
 
-    return jsonify(body)
+    return response
 
 
 if __name__ == '__main__':

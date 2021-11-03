@@ -10,7 +10,8 @@ def get_transcript_of_yt_video(v_id):
 
         if (l > 1):
             try:
-                final_transcript = YouTubeTranscriptApi.get_transcript(v_id, languages=['en'])
+                final_transcript = YouTubeTranscriptApi.get_transcript(
+                    v_id, languages=['en'])
                 return final_transcript
             except:
                 for i in transcript_list:
@@ -22,7 +23,8 @@ def get_transcript_of_yt_video(v_id):
             for i in transcript_list:
                 start_with = str(i)[:2]
                 if start_with == 'en':
-                    final_transcript = YouTubeTranscriptApi.get_transcript(v_id, languages=['en'])
+                    final_transcript = YouTubeTranscriptApi.get_transcript(
+                        v_id, languages=['en'])
                 else:
                     transcript = transcript_list.find_transcript([start_with])
                     final_transcript = transcript.translate('en').fetch()
