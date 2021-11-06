@@ -71,7 +71,7 @@ def respond():
         else:
             data['message'] = "Success"
             data['id'] = video_id
-            data['original_txt_length'], data['final_summ_length'], data['summary'] = nlp_model(
+            data['original_txt_length'], data['final_summ_length'], data['eng_summary'], data['hind_summary'], data['guj_summary'] = nlp_model(
                 video_id)
 
     body["data"] = data
@@ -97,7 +97,7 @@ def buildResponse(body):
     # res = Response(response=json.dumps(body), status=statusCode, mimetype="application/json")
     # res.headers["Content-Type"] = "application/json; charset=utf-8"
     # return res
-    
+
     response = jsonify(body)
     # response.headers.add('Access-Control-Allow-Origin', '*')
 
